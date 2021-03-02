@@ -15,6 +15,7 @@ import Foundation
 
 public struct Token : Codable {
   public var AccessToken : String?
+  public var IdToken : String?
   public var TokenType : String?
   public var ExpiresIn : Int?
   public var RefreshToken : String?
@@ -22,6 +23,7 @@ public struct Token : Codable {
   public var CreationTime : Date?
   enum CodingKeys: String, CodingKey {
     case AccessToken = "access_token"
+    case IdToken = "id_token"
     case TokenType = "token_type"
     case ExpiresIn = "expires_in"
     case RefreshToken = "refresh_token"
