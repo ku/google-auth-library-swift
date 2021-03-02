@@ -48,8 +48,9 @@ public class ServiceAccountTokenProvider : TokenProvider {
   var credentials : ServiceAccountCredentials
   var scopes : [String]
   var rsaKey : RSAKey
-  
-  public init?(credentialsData:Data, scopes:[String]) {
+  private let targetAudience: String?
+
+  public init?(credentialsData:Data, scopes:[String] = [], targetAudience: String? = nil) {
     let decoder = JSONDecoder()
     guard let credentials = try? decoder.decode(ServiceAccountCredentials.self,
                                                 from: credentialsData)
@@ -58,6 +59,7 @@ public class ServiceAccountTokenProvider : TokenProvider {
     }
     self.credentials = credentials
     self.scopes = scopes
+    self.targetAudience = targetAudience
     guard let rsaKey = RSAKey(privateKey:credentials.PrivateKey)
       else {
         return nil
@@ -79,7 +81,8 @@ public class ServiceAccountTokenProvider : TokenProvider {
                                   Audience:credentials.TokenURI,
                                   Scope:  scopes.joined(separator: " "),
                                   IssuedAt: Int(iat.timeIntervalSince1970),
-                                  Expiration: Int(exp.timeIntervalSince1970))
+                                  Expiration: Int(exp.timeIntervalSince1970),
+                                  TargetAudience: targetAudience)
     let jwtHeader = JWTHeader(Algorithm: "RS256",
                               Format: "JWT")
     let msg = try JWT.encodeWithRS256(jwtHeader:jwtHeader,

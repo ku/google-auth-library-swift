@@ -28,15 +28,17 @@ struct JWTHeader : Codable {
 struct JWTClaimSet : Codable {
   let Issuer : String
   let Audience : String
-  let Scope : String
+  let Scope : String?
   let IssuedAt : Int
   let Expiration : Int
+  let TargetAudience : String?
   enum CodingKeys: String, CodingKey {
     case Issuer = "iss"
     case Audience = "aud"
     case Scope = "scope"
     case IssuedAt = "iat"
     case Expiration = "exp"
+    case TargetAudience = "target_audience"
   }
 }
 
